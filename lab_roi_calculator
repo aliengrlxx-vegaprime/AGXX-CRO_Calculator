@@ -1,0 +1,330 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useMemo, useState, useId } from "react";
+import { Footer } from "@/components/Footer";
+import { TelegramBubble } from "@/components/TelegramBubble";
+
+export const Route = createFileRoute("/lab/roi-calculation-guide")({
+  head: () => ({
+    meta: [
+      { title: "CRO ROI Calculation Guide — AGXX Labs" },
+      {
+        name: "description",
+        content:
+          "Project CRO ROI before you spend. Deterministic math behind Predictive CRO and the 42 Formula System, with an interactive calculator.",
+      },
+      { property: "og:title", content: "How to Calculate the ROI of Conversion Rate Optimization" },
+      {
+        property: "og:description",
+        content:
+          "Project conversion lift and revenue impact with the same math AGXX Labs uses for Predictive CRO. Interactive calculator included.",
+      },
+      { property: "og:type", content: "article" },
+      {
+        property: "og:url",
+        content: "https://agxxlabs.com/lab/roi-calculation-guide",
+      },
+    ],
+    links: [
+      { rel: "canonical", href: "https://agxxlabs.com/lab/roi-calculation-guide" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: "How to Calculate the ROI of Conversion Rate Optimization",
+          author: { "@type": "Organization", name: "AGXX Labs" },
+          publisher: { "@type": "Organization", name: "AGXX Labs" },
+          mainEntityOfPage: "https://agxxlabs.com/lab/roi-calculation-guide",
+        }),
+      },
+    ],
+  }),
+  component: RoiGuide,
+});
+
+function RoiGuide() {
+  return (
+    <main className="relative min-h-screen bg-[#eef1f2] text-[#121416]/85">
+      <article className="section-shell relative z-10">
+        <div className="grid-overlay-light" aria-hidden />
+        <div className="relative z-10 mx-auto flex max-w-[760px] flex-col gap-[34px]">
+          <p className="font-mono-data text-[11px] uppercase tracking-[0.18em] text-[#121416]/55">
+            AGXX Lab · ROI Methodology
+          </p>
+
+          <h1 className="font-display text-[32px] font-bold uppercase leading-[1.15] tracking-[0.04em] text-[#121416] sm:text-[42px]">
+            How to Calculate the ROI of Conversion Rate Optimization
+          </h1>
+
+          <p className="text-[17px] leading-[1.7]">
+            Most CRO content tells you to A/B test and "iterate." That works on a long enough
+            timeline, but it does not answer the question every operator actually asks before
+            signing a $5k–$30k engagement: <em>how much money will this make me, and when?</em>
+            This guide walks through the deterministic math AGXX Labs uses to project CRO ROI
+            <em> before</em> a single line of code or copy changes — the same approach behind our
+            Predictive CRO diagnostic and the 42 Formula System.
+          </p>
+
+          <Section title="The base CRO ROI formula">
+            <p>
+              Every projection starts from one identity:
+            </p>
+            <Formula>
+              ROI&nbsp;=&nbsp;( Incremental Revenue − Investment ) ÷ Investment
+            </Formula>
+            <p>
+              The hard part is not the division. It is producing an{" "}
+              <strong>Incremental Revenue</strong> number you can defend before the work starts.
+              That requires decomposing revenue into the variables CRO actually moves.
+            </p>
+          </Section>
+
+          <Section title="Decomposing revenue into movable variables">
+            <p>Annual revenue from a funnel reduces to four levers:</p>
+            <Formula>
+              Revenue&nbsp;=&nbsp;Sessions × Conversion Rate × Average Order Value × Repeat Factor
+            </Formula>
+            <p>
+              CRO directly moves <strong>Conversion Rate</strong> and (via merchandising, bundles,
+              and friction removal at checkout) <strong>AOV</strong>. UX work indirectly lifts
+              <strong> Repeat Factor</strong> through retention and reduced post-purchase regret.
+              Sessions stay constant in a pure CRO model — that is the honest constraint. If a
+              vendor projects ROI by also assuming traffic growth, they are selling SEO or paid,
+              not CRO.
+            </p>
+          </Section>
+
+          <Section title="Projected lift, the deterministic way">
+            <p>
+              The naïve approach: "we usually see 20% lift, so multiply." That is a sales pitch,
+              not math. The deterministic approach diagnoses which of the{" "}
+              <strong>9 Pillars of Broken Conversion</strong> your funnel actually leaks through,
+              assigns a friction coefficient to each, and sums the recoverable share.
+            </p>
+            <Formula>
+              Projected Lift&nbsp;=&nbsp;Σ ( Pillar Weight<sub>i</sub> × Friction
+              Coefficient<sub>i</sub> × Recovery Ceiling<sub>i</sub> )
+            </Formula>
+            <p>
+              Pillar weights and recovery ceilings come from the 42 Formula System — a validated
+              set of relationships between observed friction (bounce on hero, scroll depth on
+              proof, cart abandon rate, form-field drop-off, etc.) and the conversion delta
+              recoverable when that friction is removed. The output is a single projected
+              conversion-rate multiplier with bounds, not a wishful percentage.
+            </p>
+          </Section>
+
+          <Section title="From projected lift to projected revenue">
+            <Formula>
+              Incremental Revenue&nbsp;=&nbsp;Sessions × (CR<sub>new</sub> − CR<sub>old</sub>)
+              × AOV
+            </Formula>
+            <p>
+              Plug the projected CR<sub>new</sub> back into the revenue identity, subtract the
+              baseline, and you have a defensible incremental revenue number with explicit
+              assumptions. ROI follows directly from the opening formula. Because every input is
+              measurable and every coefficient is validated, the projection is auditable — not
+              a vibe.
+            </p>
+          </Section>
+
+          <Section title="Try it: simplified CRO ROI calculator">
+            <RoiCalculator />
+            <p className="mt-[21px] text-[14px] leading-[1.65] text-[#121416]/70">
+              This is the simplified single-pillar version. The full diagnostic models all nine
+              pillars simultaneously, accounts for variance, and outputs a confidence band — not
+              a single point estimate.
+            </p>
+          </Section>
+
+          <Section title="Why this differs from typical CRO advice">
+            <p>
+              Most CRO resources (CXL, ConversionXL-era playbooks, generic agency posts) optimize
+              for test velocity: ship more experiments, learn faster, compound results. That is
+              correct for in-house teams with the runway to wait. It is the wrong frame for a
+              decision-maker evaluating a fixed-scope engagement.
+            </p>
+            <p>
+              Predictive CRO inverts the loop: project ROI <em>first</em> from the diagnostic, then
+              build only the changes that the math says will move the projected number. The
+              feedback loop is not test-driven — it is reconciliation-driven. After
+              stabilization, real ROI is measured against the projection, and the delta refines
+              the next set of coefficients.
+            </p>
+          </Section>
+
+          <div className="mt-[34px] border-t border-[#121416]/15 pt-[34px]">
+            <p className="font-mono-data text-[11px] uppercase tracking-[0.18em] text-[#121416]/55">
+              Next step
+            </p>
+            <h2 className="mt-[13px] font-display text-[22px] font-semibold uppercase tracking-[0.04em] text-[#121416]">
+              Run the full diagnostic on your funnel.
+            </h2>
+            <p className="mt-[13px] text-[15px] leading-[1.7]">
+              The calculator above uses one pillar and one coefficient. Your real funnel leaks
+              through several at once, and the interactions matter. The diagnostic models them.
+            </p>
+            <Link
+              to="/diagnostic"
+              className="mt-[34px] inline-flex items-center justify-center bg-[#121416] px-[34px] py-[16px] font-mono-data text-[12px] font-semibold uppercase tracking-[0.14em] text-[#eef1f2] transition-colors hover:bg-[#121416]/85"
+            >
+              Start your diagnostic
+            </Link>
+          </div>
+
+          <div className="mt-[21px]">
+            <Link
+              to="/"
+              className="font-mono-data text-[11px] uppercase tracking-[0.18em] text-[#121416]/55 underline-offset-4 hover:underline"
+            >
+              ← Back to home
+            </Link>
+          </div>
+        </div>
+      </article>
+      <Footer />
+      <TelegramBubble />
+    </main>
+  );
+}
+
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="flex flex-col gap-[13px]">
+      <h2 className="font-display text-[22px] font-semibold uppercase tracking-[0.04em] text-[#121416] sm:text-[26px]">
+        {title}
+      </h2>
+      <div className="flex flex-col gap-[13px] text-[16px] leading-[1.7]">{children}</div>
+    </section>
+  );
+}
+
+function Formula({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="my-[8px] border-l-2 border-[#121416] bg-[#121416]/[0.04] px-[21px] py-[16px] font-mono-data text-[14px] leading-[1.6] text-[#121416]">
+      {children}
+    </div>
+  );
+}
+
+function RoiCalculator() {
+  const [sessions, setSessions] = useState(50000);
+  const [cr, setCr] = useState(2.0);
+  const [aov, setAov] = useState(120);
+  const [lift, setLift] = useState(25);
+  const [investment, setInvestment] = useState(15000);
+
+  const result = useMemo(() => {
+    const crOld = cr / 100;
+    const crNew = crOld * (1 + lift / 100);
+    const baseline = sessions * crOld * aov;
+    const projected = sessions * crNew * aov;
+    const incremental = projected - baseline;
+    const roi = investment > 0 ? ((incremental - investment) / investment) * 100 : 0;
+    const payback = incremental > 0 ? (investment / incremental) * 12 : null;
+    return { baseline, projected, incremental, roi, payback };
+  }, [sessions, cr, aov, lift, investment]);
+
+  const fmt = (n: number) =>
+    n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+  return (
+    <div className="border border-[#121416]/20 bg-white p-[21px] sm:p-[28px]">
+      <div className="grid gap-[16px] sm:grid-cols-2">
+        <Field label="Monthly sessions" value={sessions} onChange={setSessions} min={0} step={1000} />
+        <Field
+          label="Current conversion rate (%)"
+          value={cr}
+          onChange={setCr}
+          min={0}
+          step={0.1}
+        />
+        <Field label="Average order value ($)" value={aov} onChange={setAov} min={0} step={5} />
+        <Field
+          label="Projected lift (%)"
+          value={lift}
+          onChange={setLift}
+          min={0}
+          step={1}
+        />
+        <Field
+          label="CRO investment ($)"
+          value={investment}
+          onChange={setInvestment}
+          min={0}
+          step={500}
+        />
+      </div>
+
+      <div className="mt-[28px] grid gap-[13px] border-t border-[#121416]/15 pt-[21px] sm:grid-cols-2">
+        <Result label="Baseline monthly revenue" value={fmt(result.baseline)} />
+        <Result label="Projected monthly revenue" value={fmt(result.projected)} />
+        <Result label="Incremental monthly revenue" value={fmt(result.incremental)} highlight />
+        <Result label="Annual ROI" value={`${result.roi.toFixed(0)}%`} highlight />
+        <Result
+          label="Payback period"
+          value={result.payback ? `${result.payback.toFixed(1)} months` : "—"}
+        />
+      </div>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  value,
+  onChange,
+  min,
+  step,
+}: {
+  label: string;
+  value: number;
+  onChange: (n: number) => void;
+  min?: number;
+  step?: number;
+}) {
+  const id = useId();
+  return (
+    <div className="flex flex-col gap-[6px]">
+      <label htmlFor={id} className="font-mono-data text-[11px] uppercase tracking-[0.14em] text-[#121416]/65">
+        {label}
+      </label>
+      <input
+        id={id}
+        type="number"
+        value={value}
+        min={min}
+        step={step}
+        onChange={(e) => onChange(Number(e.target.value) || 0)}
+        className="border border-[#121416]/25 bg-white px-[12px] py-[10px] font-mono-data text-[15px] text-[#121416] focus:border-[#121416] focus:outline-none"
+      />
+    </div>
+  );
+}
+
+function Result({
+  label,
+  value,
+  highlight = false,
+}: {
+  label: string;
+  value: string;
+  highlight?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-[4px]">
+      <span className="font-mono-data text-[10px] uppercase tracking-[0.14em] text-[#121416]/60">
+        {label}
+      </span>
+      <span
+        className={`font-display text-[20px] font-semibold tracking-[0.01em] ${
+          highlight ? "text-[#121416]" : "text-[#121416]/85"
+        }`}
+      >
+        {value}
+      </span>
+    </div>
+  );
+}
